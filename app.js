@@ -6,8 +6,8 @@ const app = express();
 
 require('dotenv').config();
 
-app.use(bodyParser.json({ limit: '1mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
+app.use(bodyParser.json({ limit: '500kb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '500kb' }));
 app.use(cors());
 app.use(express.json());
 
@@ -16,8 +16,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useCrea
 
 const connection = mongoose.connection;
 connection.once('open', () => {
-  console.log("MongoDB database connection established successfully");
-});
+    console.log("MongoDB database connection established successfully");
+  });
 
 const stagesRouter = require('./routes/stages');
 app.use('/stages', stagesRouter);

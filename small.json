@@ -3,6 +3,7 @@
   "onlineData": {
     "courseCreator": "",
     "courseID": -1,
+    "platform": "pc",
     "playAttempts": 0,
     "playCompletions": 0,
     "likes": 0

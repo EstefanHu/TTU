@@ -15,19 +15,19 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/getStage/:id').get((req, res) => {
+router.route('/stage/:id').get((req, res) => {
   Stage.find({ "onlineData.courseID": req.params.id })
     .then(stage => res.json(stage))
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-router.route('/getProfile/:creator').get((req, res) => {
+router.route('/profile/:creator').get((req, res) => {
   Stage.find({ "onlineData.courseCreator": req.params.creator })
     .then(stages => res.json(stages))
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-router.route('/createStage').post((req, res) => {
+router.route('/uploadStage').post((req, res) => {
   const isPublished = req.body.isPublished;
   const courseCreator = req.body.onlineData.courseCreator;
   const courseID = req.body.onlineData.courseID;
@@ -56,10 +56,21 @@ router.route('/createStage').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/updateStageStats/:id').put((req, res) => {
+router.route('/publishStage').put((req, res) => {
   Stage.find({ "onlineData.courseID": req.params.id })
     .then(stage => {
       stage[0].isPublished = req.body.isPublished;
+
+      stage[0].save()
+        .then(() => res.json('Stage PUblished'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+})
+
+router.route('/updateStats/:id').put((req, res) => {
+  Stage.find({ "onlineData.courseID": req.params.id })
+    .then(stage => {
       stage[0].onlineData = {
         "courseCreator": req.body.onlineData.courseCreator,
         "courseID": req.body.onlineData.courseID,
@@ -76,16 +87,16 @@ router.route('/updateStageStats/:id').put((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-router.route('/likeStage/:id').put((req, res) => {
+router.route('/changePlatform/:id').put((req, res) => {
   Stage.find({ "onlineData.courseID": req.params.id })
     .then(stage => {
-      stage[0].onlineData.likes++;
+      stage[0].onlineData.platform = req.body.platform;
 
       stage[0].save()
-        .then(() => res.json('Liked stage'))
-        .catch(err => res.status(400).json('Error:' + err));
+        .then(() => res.json('Changed Platform'))
+        .catch(err => res.status(400).json('Error: ' + err));
     })
-    .catch(err => res.status(400).json('Error: ' + err))
+    .catch(err => res.status(400).json('Error: ' + err));
 })
 
 router.route('/attemptStage/:id').put((req, res) => {
@@ -110,6 +121,18 @@ router.route('/completeStage/:id').put((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
     })
     .catch(err => res.status(400).json('Error: ' + err));
+})
+
+router.route('/likeStage/:id').put((req, res) => {
+  Stage.find({ "onlineData.courseID": req.params.id })
+    .then(stage => {
+      stage[0].onlineData.likes++;
+
+      stage[0].save()
+        .then(() => res.json('Liked stage'))
+        .catch(err => res.status(400).json('Error:' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err))
 })
 
 router.route('/updateStage').put((req, res) => {
