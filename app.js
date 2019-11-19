@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
+const multer = require('multer');
 
 require('dotenv').config();
 
@@ -10,6 +11,7 @@ app.use(bodyParser.json({ limit: '500kb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '500kb' }));
 app.use(cors());
 app.use(express.json());
+app.use(multer().none());
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
