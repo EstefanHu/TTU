@@ -1,6 +1,10 @@
 const router = require('express').Router();
 let Stage = require('../models/stage.model');
 
+router.route('/test').get((req, res) => {
+	res.sendFile(__dirname + '/../index.html');
+});
+
 router.route('/').get((req, res) => {
   const pagination = req.query.pagination
     ? parseInt(req.query.pagination)
